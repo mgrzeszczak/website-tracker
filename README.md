@@ -30,7 +30,7 @@ Create config file:
 # Usage
 Using cron is recommended, set it to run _tracker.py_ every x minutes.
 
-For example crontab configuration running the script every 30 minutes:
+Here is an example crontab configuration running the script every 30 minutes:
 ```
 */30 * * * * /path/to/tracker.py
 ```
