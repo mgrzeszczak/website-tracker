@@ -1,0 +1,21 @@
+{
+    "sender" : {
+        "address" : "someemail@gmail.com",
+        "password" : "somepass",
+        "smtp_server" : "smtp.gmail.com",
+        "port" : "587",
+        "enable_tls" : true
+    },
+    "trackers" : [
+        {
+            "alias" : "TRACKER #1",
+            "to" : [
+                "email1@email.com",
+                "email2@email.com"
+            ],
+            "url" : "http://some-url.com"
+            "subject" : "email notification subject",
+            "content" : "email notification content"
+        }
+    ]
+}
