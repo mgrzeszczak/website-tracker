@@ -19,7 +19,7 @@ def setup_logging():
     log.basicConfig(format='%(asctime)s [%(levelname)s]: %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',level=log.INFO)
 
 def sha256(plain):
-    return hashlib.sha256(plain.encode('ascii')).hexdigest()
+    return hashlib.sha256(plain.encode()).hexdigest()
 
 def abs_path(path):
     home = home_dir()
@@ -45,9 +45,12 @@ class MailSender():
         self.__create_con()
 
     def send(self,sender,receivers,subject,content):
-        receivers = ', '.join(receivers)
-        sender = '{} <{}>'.format(sender, self.config.address)
-        self.con.sendmail(sender,receivers,self.__create_msg(sender,receivers,subject,content).as_string())
+        try:
+            receivers = ', '.join(receivers)
+            sender = '{} <{}>'.format(sender, self.config.address)
+            self.con.sendmail(sender,receivers,self.__create_msg(sender,receivers,subject,content).as_string())
+        except:
+            log.error('Failed to send mail')
 
     def __create_con(self):
         self.con = smtplib.SMTP(self.config.smtp_server,self.config.port)
@@ -116,14 +119,14 @@ class Tracker:
             return None
 
 def load_config():
-    path = DEF_CONF_LOC
+    path = abs_path(DEF_CONF_LOC)
     if len(sys.argv) >= 2:
         path = sys.argv[1]
     try:
         with open(path,'r') as f:
             return PropDict(jsonpickle.decode(f.read()))
-    except:
-        log.error('Failed to read config file: {}'.format(path))
+    except Exception as e:
+        log.error('Failed to read config file: {} - {}'.format(path,e))
         sys.exit(1)
 
 if __name__ == '__main__':
